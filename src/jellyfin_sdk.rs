@@ -35,7 +35,18 @@ impl JellyfinSDK {
     pub fn get_api(&self) -> JellyfinSDKResult<&JellyfinAPI> {
         self.api
             .as_ref()
-            .ok_or_else(|| JellyfinSDKError::NoJellyfinAPICreated)
+            .ok_or(JellyfinSDKError::NoJellyfinAPICreated)
+    }
+
+    /// Force getting the [`JellyfinAPI`] instance.
+    ///
+    ///
+    /// Must be used carefully.
+    /// Panics if no instance has been initialized before calling this method.
+    pub fn get_api_unchecked(&self) -> &JellyfinAPI {
+        self.api
+            .as_ref()
+            .expect("Cannot get JellyfinAPI before initializing it.")
     }
 }
 

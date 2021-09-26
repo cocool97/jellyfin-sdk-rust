@@ -1,6 +1,6 @@
 [package]
 name = "jellyfin-sdk-rust"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2018"
 description = "Jellyfin Rust SDK"
 license = "MIT"
@@ -10,9 +10,11 @@ repository = "https://github.com/cocool97/jellyfin-sdk-rust"
 default = ["async"]
 async = []
 sync = ["reqwest/blocking"]
+headers = []
 
 [dependencies]
 thiserror = { version = "1.0.29", default-features=false }
+url = { version = "2.2.2", default-features=false }
 serde = { version = "1.0.130", default-features=false, features=["derive"] }
 serde_json = { version = "1.0.68", default-features=false }
 reqwest = { version = "0.11.4", default-features=false, features=["native-tls", "json"] }

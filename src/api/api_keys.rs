@@ -1,4 +1,8 @@
-use crate::{models::keys::JellyfinKey, JellyfinAPI, JellyfinResponse, JellyfinSDKResult};
+use crate::{
+    api::URLBuilder,
+    models::{keys::JellyfinKey, JellyfinBaseResponse},
+    JellyfinAPI, JellyfinResponse, JellyfinSDKResult,
+};
 
 impl JellyfinAPI {
     #[cfg(feature = "sync")]
@@ -6,11 +10,40 @@ impl JellyfinAPI {
         unimplemented!()
     }
 
-    pub async fn async_get_all_keys(&self) -> JellyfinSDKResult<JellyfinResponse<JellyfinKey>> {
-        let url = format!("{}/Auth/Keys", self.base_addr());
+    /// Get all keys.
+    pub async fn async_get_keys(
+        &self,
+    ) -> JellyfinSDKResult<JellyfinResponse<JellyfinBaseResponse<JellyfinKey>>> {
+        let url = URLBuilder::from(self.base_addr(), "/Auth/Keys")?;
 
-        let res = self.async_client().get(url).send().await?;
+        let res = self.async_client().get(url.build()).send().await?;
 
-        Ok(JellyfinResponse::async_from(res).await)
+        JellyfinResponse::async_from(res).await
+    }
+
+    #[cfg(feature = "sync")]
+    pub fn create_key(&self, app: &str) {}
+
+    /// Create a new api key.
+    pub async fn async_create_key(&self, app: &str) -> JellyfinSDKResult<JellyfinResponse<()>> {
+        let mut url = URLBuilder::from(self.base_addr(), "/Auth/Keys")?;
+        url.add_param("App", app);
+
+        let res = self.async_client().post(url.build()).send().await?;
+
+        JellyfinResponse::async_from(res).await
+    }
+
+    #[cfg(feature = "sync")]
+    pub fn revoke_key(&self, key: &str) {}
+
+    /// Remove an api key.
+    pub async fn async_revoke_key(&self, key: &str) -> JellyfinSDKResult<JellyfinResponse<()>> {
+        let mut url = URLBuilder::from(self.base_addr(), "/Auth/Keys/")?;
+        url.join_path(key)?;
+
+        let res = self.async_client().delete(url.build()).send().await?;
+
+        JellyfinResponse::async_from(res).await
     }
 }

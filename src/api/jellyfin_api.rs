@@ -1,4 +1,4 @@
-use reqwest::header::HeaderMap;
+use reqwest::header::{HeaderMap, CONNECTION};
 
 /// Structure managing all API interactions.
 pub struct JellyfinAPI {
@@ -17,6 +17,8 @@ impl JellyfinAPI {
 
         let mut headers = HeaderMap::new();
 
+        headers.insert(CONNECTION, "keep-alive".parse().unwrap());
+
         match token {
             Some(t) => {
                 headers.insert("X-Emby-Token", t.parse().unwrap());
@@ -24,7 +26,9 @@ impl JellyfinAPI {
             None => {
                 headers.insert(
                     "X-Emby-Authorization",
-                    r#"MediaBrowser Client="toto", Version="10.7.7"#.parse().unwrap(),
+                    r#"MediaBrowser Client="Jellyfin SDK", Version="10.7.7"#
+                        .parse()
+                        .unwrap(),
                 );
             }
         }
@@ -34,6 +38,7 @@ impl JellyfinAPI {
             .default_headers(headers)
             .build()
             .unwrap();
+
         #[cfg(feature = "sync")]
         let sync_client = reqwest::blocking::Client::builder()
             .user_agent(USER_AGENT)
