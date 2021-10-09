@@ -8,11 +8,11 @@ use crate::{JellyfinSDKError, JellyfinSDKResult};
 
 /// Structure containing the request status code and a `Result` that may contain the body.
 pub struct JellyfinResponse<T> {
-    status: u16,
-    url: Url,
+    pub(crate) status: u16,
+    pub(crate) url: Url,
     #[cfg(feature = "headers")]
-    headers: HeaderMap,
-    body: Result<T, reqwest::Error>,
+    pub(crate) headers: HeaderMap,
+    pub(crate) body: Result<T, reqwest::Error>,
 }
 
 impl<T> JellyfinResponse<T> {
@@ -36,20 +36,16 @@ impl<T> JellyfinResponse<T> {
     pub(crate) async fn async_from(response: Response) -> JellyfinSDKResult<Self>
     where
         T: DeserializeOwned,
-        T: 'static,
     {
-        let status = response.status().as_u16();
-
-        if response.status().is_success() {
-            Ok(JellyfinResponse {
-                status,
-                url: response.url().clone(),
+        match response.error_for_status() {
+            Ok(res) => Ok(JellyfinResponse {
+                status: res.status().as_u16(),
+                url: res.url().clone(),
                 #[cfg(feature = "headers")]
-                headers: response.headers().clone(),
-                body: response.json::<T>().await,
-            })
-        } else {
-            Err(JellyfinSDKError::HttpResponseError(status))
+                headers: res.headers().clone(),
+                body: res.json::<T>().await,
+            }),
+            Err(err) => Err(JellyfinSDKError::ReqwestError(err)),
         }
     }
 }

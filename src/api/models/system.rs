@@ -138,3 +138,27 @@ pub struct PublicSystemInformations {
     #[serde(rename = "StartupWizardCompleted")]
     pub startup_wizard_completed: bool,
 }
+
+pub type AvailableLogFiles = Vec<AvailableLogFile>;
+
+#[derive(Deserialize, Debug)]
+pub struct AvailableLogFile {
+    #[serde(rename = "DateCreated")]
+    date_created: String,
+    #[serde(rename = "DateModified")]
+    date_modified: String,
+    #[serde(rename = "Size")]
+    size: u64,
+    #[serde(rename = "Name")]
+    name: String,
+}
+
+pub type WakeOnLanInformations = Vec<WakeOnLanInformation>;
+
+#[derive(Deserialize, Debug)]
+pub struct WakeOnLanInformation {
+    #[serde(rename = "MacAddress")]
+    pub mac_address: String,
+    #[serde(rename = "Port")]
+    pub port: u32,
+}

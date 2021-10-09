@@ -13,7 +13,7 @@ This specification is tested and developped with version `10.7.7` of Jellyfin se
 |Endpoint|Method|Usage|Implemented|Comment(s)|
 |:-:|:-:|:-:|:-:|:-:|
 |`/Auth/Keys`|GET|Get all keys.|Yes|-|
-|`/Auth/Keys`|POST|Create a new api key.|No|Must be tested. Does not work yet|
+|`/Auth/Keys`|POST|Create a new api key.|-|Must be tested. Does not work yet|
 |`/Auth/Keys/{key}`|DELETE|Remove an api key.|Yes|-|
 
 ## Artists
@@ -252,13 +252,13 @@ This specification is tested and developped with version `10.7.7` of Jellyfin se
 |`/System/Endpoint`|GET|Gets information about the request endpoint.|Yes|-|
 |`/System/Info`|GET|Gets information about the server.|Yes|- Needs more testing for `CompletedInstallations` field. Field `StartupWizardCompleted` is buggy as missing here but present in `/System/Info/Public`|
 |`/System/Info/Public`|GET|Gets public information about the server.|Yes|-|
-|`/System/Logs`|GET|Gets a list of available server log files.|No|-|
-|`/System/Logs/Log`|GET|Gets a log file.|No|-|
-|`/System/Ping`|GET|Pings the system.|No|-|
-|`/System/Ping`|POST|Pings the system.|No|-|
-|`/System/Restart`|POST|Restarts the application.|No|-|
-|`/System/Shutdown`|POST|Shuts down the application.|No|-|
-|`/System/WakeOnLanInfo`|GET|Gets wake on lan information.|No|-|
+|`/System/Logs`|GET|Gets a list of available server log files.|Yes|-|
+|`/System/Logs/Log`|GET|Gets a log file.|Yes|-|
+|`/System/Ping`|GET|Pings the system.|Yes|-|
+|`/System/Ping`|POST|Pings the system.|-|Implemented but needs testing|
+|`/System/Restart`|POST|Restarts the application.|-|Implemented but needs testing|
+|`/System/Shutdown`|POST|Shuts down the application.|-|Implemented but needs testing|
+|`/System/WakeOnLanInfo`|GET|Gets wake on lan information.|Yes|-|
 
 ## TimeSync
 
